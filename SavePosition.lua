@@ -1,8 +1,8 @@
 pcall(function()
 	if setclipboard then
-		setclipboard("Made by SmileX")
+		setclipboard("Made By Bhuzel")
 	elseif toclipboard then
-		toclipboard("Made by SmileX")
+		toclipboard("Made By Bhuzel")
 	end
 end)
 
@@ -42,7 +42,6 @@ local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 8)
 titleCorner.Parent = titleBar
 
--- Fix untuk menutupi sudut bawah title bar agar menyatu dengan container
 local titleFiller = Instance.new("Frame")
 titleFiller.Size = UDim2.new(1, 0, 0, 8)
 titleFiller.Position = UDim2.new(0, 0, 1, -8)
@@ -55,7 +54,7 @@ titleText.Size = UDim2.new(1, -70, 1, 0)
 titleText.Position = UDim2.new(0, 12, 0, 0)
 titleText.BackgroundTransparency = 1
 titleText.Text = "Pos Manager"
-titleText.Font = Enum.Font.GothamMedium
+titleText.Font = Enum.Font.FredokaOne
 titleText.TextSize = 13
 titleText.TextColor3 = Color3.fromRGB(200, 200, 200)
 titleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -66,7 +65,7 @@ local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0, 25, 0, 25)
 minBtn.Position = UDim2.new(1, -60, 0.5, -12.5)
 minBtn.Text = "-"
-minBtn.Font = Enum.Font.GothamMedium
+minBtn.Font = Enum.Font.FredokaOne
 minBtn.TextSize = 16
 minBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
 minBtn.BackgroundTransparency = 1
@@ -77,7 +76,7 @@ local addBtn = Instance.new("TextButton")
 addBtn.Size = UDim2.new(0, 25, 0, 25)
 addBtn.Position = UDim2.new(1, -30, 0.5, -12.5)
 addBtn.Text = "+"
-addBtn.Font = Enum.Font.GothamMedium
+addBtn.Font = Enum.Font.FredokaOne
 addBtn.TextSize = 16
 addBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
 addBtn.BackgroundTransparency = 1
@@ -110,9 +109,9 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- Area Scroll
+-- Area Scroll (Dikurangi ukurannya sedikit untuk watermark)
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -16, 1, -45)
+scrollFrame.Size = UDim2.new(1, -16, 1, -55)
 scrollFrame.Position = UDim2.new(0, 8, 0, 40)
 scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 scrollFrame.ScrollBarThickness = 2
@@ -126,6 +125,18 @@ listLayout.Parent = scrollFrame
 listLayout.Padding = UDim.new(0, 8)
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
+-- Watermark
+local watermark = Instance.new("TextLabel")
+watermark.Size = UDim2.new(1, 0, 0, 15)
+watermark.Position = UDim2.new(0, 0, 1, -15)
+watermark.BackgroundTransparency = 1
+watermark.Text = "Made By BhuzelRayhan"
+watermark.Font = Enum.Font.Gotham
+watermark.TextSize = 9
+watermark.TextColor3 = Color3.fromRGB(200, 200, 200)
+watermark.TextTransparency = 0.6
+watermark.Parent = container
+
 -- Fungsi Minimize
 local isMinimized = false
 minBtn.MouseButton1Click:Connect(function()
@@ -133,18 +144,18 @@ minBtn.MouseButton1Click:Connect(function()
 	if isMinimized then
 		container.Size = UDim2.new(0, 220, 0, 35)
 		scrollFrame.Visible = false
+		watermark.Visible = false
 	else
 		container.Size = UDim2.new(0, 220, 0, 320)
 		scrollFrame.Visible = true
+		watermark.Visible = true
 	end
 end)
 
 local rows = {}
 
-local function createButton(parent, text, xPos, color)
+local function createButton(parent, text, color)
 	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0.5, -4, 0, 22)
-	btn.Position = UDim2.new(xPos, 0, 1, -28)
 	btn.Text = text
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 11
@@ -170,7 +181,7 @@ local function createRow(isRoot)
 	rowCorner.CornerRadius = UDim.new(0, 6)
 	rowCorner.Parent = row
 
-	-- TextBox (Teks Kosong, Placeholder Saja)
+	-- TextBox
 	local nameBox = Instance.new("TextBox")
 	nameBox.Size = UDim2.new(1, -30, 0, 20)
 	nameBox.Position = UDim2.new(0, 8, 0, 6)
@@ -184,13 +195,14 @@ local function createRow(isRoot)
 	nameBox.TextXAlignment = Enum.TextXAlignment.Left
 	nameBox.Parent = row
 
-	-- Tombol Save & Load di bawah
-	local saveBtn = createButton(row, "Save", 0, Color3.fromRGB(45, 45, 45))
+	-- Tombol Save & Load dengan ukuran lebih ramping (gap di sisi kiri, tengah, kanan)
+	local saveBtn = createButton(row, "Save", Color3.fromRGB(45, 45, 45))
+	saveBtn.Size = UDim2.new(0.5, -12, 0, 22)
 	saveBtn.Position = UDim2.new(0, 8, 1, -28)
 	
-	local loadBtn = createButton(row, "Load", 0, Color3.fromRGB(60, 60, 60))
-	loadBtn.Position = UDim2.new(0.5, 4, 1, -28)
+	local loadBtn = createButton(row, "Load", Color3.fromRGB(60, 60, 60))
 	loadBtn.Size = UDim2.new(0.5, -12, 0, 22)
+	loadBtn.Position = UDim2.new(0.5, 4, 1, -28)
 
 	local savedPos
 
@@ -221,7 +233,7 @@ local function createRow(isRoot)
 		deleteBtn.Size = UDim2.new(0, 20, 0, 20)
 		deleteBtn.Position = UDim2.new(1, -24, 0, 6)
 		deleteBtn.Text = "×"
-		deleteBtn.Font = Enum.Font.GothamMedium
+		deleteBtn.Font = Enum.Font.FredokaOne
 		deleteBtn.TextSize = 14
 		deleteBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
 		deleteBtn.BackgroundTransparency = 1
@@ -247,5 +259,4 @@ addBtn.MouseButton1Click:Connect(function()
 	createRow(false)
 end)
 
--- Buat row default pertama
 createRow(true)
